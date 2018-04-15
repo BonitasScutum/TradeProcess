@@ -3,8 +3,12 @@ package com.ht.tradeprocess.service;
 
 import com.ht.tradeprocess.entity.Report;
 import junit.framework.TestCase;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Verifications;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
 
 
 import java.io.*;
@@ -13,11 +17,41 @@ import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 
 public class ReportGeneratorServiceTest {
-
+    @Mocked File outputFile;
     @BeforeEach
     public void setUp() throws Exception {
+    }
+
+    @Test
+    public void exportCsvWhenFileDoesNotExist(){
+
+        new Expectations(){
+
+            {
+            try {
+
+                outputFile.createNewFile();
+                result="xxxxx";
+                times(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }};
+//        List<Report> reportList = new ArrayList<>();
+//        ReportGeneratorService.exportCsv(outputFile,reportList);
+        new Verifications(){
+            {
+                try {
+                    outputFile.createNewFile();
+                    times(1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     @Test
