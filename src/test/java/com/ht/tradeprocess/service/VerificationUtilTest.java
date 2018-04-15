@@ -6,13 +6,13 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class VerificationServiceTest {
+public class VerificationUtilTest {
 
     @Test
     public void verifyNotEmptyWhenInputIsNull() {
         String input = null;
         boolean expect = false;
-        boolean actual = VerificationService.verifyNotEmpty(input);
+        boolean actual = VerificationUtil.verifyNotEmpty(input);
         assertEquals(expect,actual);
     }
 
@@ -20,7 +20,7 @@ public class VerificationServiceTest {
     public void verifyNotEmptyWhenInputIsEmpty() {
         String input = "";
         boolean expect = false;
-        boolean actual = VerificationService.verifyNotEmpty(input);
+        boolean actual = VerificationUtil.verifyNotEmpty(input);
         assertEquals(expect,actual);
     }
 
@@ -28,7 +28,7 @@ public class VerificationServiceTest {
     public void verifyNotEmptyWhenInputIsNotNullNotEmpty() {
         String input = "abc";
         boolean expect = true;
-        boolean actual = VerificationService.verifyNotEmpty(input);
+        boolean actual = VerificationUtil.verifyNotEmpty(input);
         assertEquals(expect,actual);
     }
 
@@ -36,7 +36,7 @@ public class VerificationServiceTest {
     public void verifyNumericalWhenInputIsEmpty() {
         String input = "";
         boolean expect = false;
-        boolean actual = VerificationService.verifyNumerical(input);
+        boolean actual = VerificationUtil.verifyNumerical(input);
         assertEquals(expect,actual);
     }
 
@@ -44,7 +44,7 @@ public class VerificationServiceTest {
     public void verifyNumericalWhenInputNotNumerical() {
         String input = "ssss";
         boolean expect = false;
-        boolean actual = VerificationService.verifyNumerical(input);
+        boolean actual = VerificationUtil.verifyNumerical(input);
         assertEquals(expect,actual);
     }
 
@@ -53,7 +53,7 @@ public class VerificationServiceTest {
     public void verifyNumericalWhenInputIsNumerical() {
         String input = "123";
         boolean expect = true;
-        boolean actual = VerificationService.verifyNumerical(input);
+        boolean actual = VerificationUtil.verifyNumerical(input);
         assertEquals(expect,actual);
     }
 
@@ -61,7 +61,7 @@ public class VerificationServiceTest {
     public void verifyDirectionWhenInputIsNull() {
         String input = null;
         boolean expect = false;
-        boolean actual = VerificationService.verifyDirection(input);
+        boolean actual = VerificationUtil.verifyDirection(input);
         assertEquals(expect,actual);
     }
 
@@ -69,7 +69,7 @@ public class VerificationServiceTest {
     public void verifyDirectionWhenInputIsBUY() {
         String input = "BUY";
         boolean expect = true;
-        boolean actual = VerificationService.verifyDirection(input);
+        boolean actual = VerificationUtil.verifyDirection(input);
         assertEquals(expect,actual);
     }
 
@@ -77,7 +77,7 @@ public class VerificationServiceTest {
     public void verifyDirectionWhenInputIsSELL() {
         String input = "SELL";
         boolean expect = true;
-        boolean actual = VerificationService.verifyDirection(input);
+        boolean actual = VerificationUtil.verifyDirection(input);
         assertEquals(expect,actual);
     }
 
@@ -85,7 +85,7 @@ public class VerificationServiceTest {
     public void verifyDirectionWhenInputIsNotBUYNotSELL() {
         String input = "ASDF";
         boolean expect = false;
-        boolean actual = VerificationService.verifyDirection(input);
+        boolean actual = VerificationUtil.verifyDirection(input);
         assertEquals(expect,actual);
     }
 
@@ -94,7 +94,7 @@ public class VerificationServiceTest {
     public void verifyOperationWhenInputIsEmpty() {
         String input = "";
         boolean expect = false;
-        boolean actual = VerificationService.verifyOperation(input);
+        boolean actual = VerificationUtil.verifyOperation(input);
         assertEquals(expect,actual);
     }
 
@@ -102,7 +102,7 @@ public class VerificationServiceTest {
     public void verifyOperationWhenInputIsNEW() {
         String input = "NEW";
         boolean expect = true;
-        boolean actual = VerificationService.verifyOperation(input);
+        boolean actual = VerificationUtil.verifyOperation(input);
         assertEquals(expect,actual);
     }
 
@@ -110,7 +110,7 @@ public class VerificationServiceTest {
     public void verifyOperationWhenInputIsAMEDN() {
         String input = "AMEND";
         boolean expect = true;
-        boolean actual = VerificationService.verifyOperation(input);
+        boolean actual = VerificationUtil.verifyOperation(input);
         assertEquals(expect,actual);
     }
 
@@ -118,7 +118,7 @@ public class VerificationServiceTest {
     public void verifyOperationWhenInputIsCANCEL() {
         String input = "CANCEL";
         boolean expect = true;
-        boolean actual = VerificationService.verifyOperation(input);
+        boolean actual = VerificationUtil.verifyOperation(input);
         assertEquals(expect,actual);
     }
 
@@ -126,7 +126,7 @@ public class VerificationServiceTest {
     public void verifyOperationWhenInputIsNotNEWNotAMEDNNotCANCEL() {
         String input = "SSSSS";
         boolean expect = false;
-        boolean actual = VerificationService.verifyOperation(input);
+        boolean actual = VerificationUtil.verifyOperation(input);
         assertEquals(expect,actual);
     }
 }

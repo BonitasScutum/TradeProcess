@@ -3,7 +3,7 @@ package com.ht.tradeprocess.camel.process;
 import com.ht.tradeprocess.entity.Report;
 import com.ht.tradeprocess.entity.Trade;
 import com.ht.tradeprocess.service.ReportGeneratorService;
-import com.ht.tradeprocess.service.VerificationService;
+import com.ht.tradeprocess.service.VerificationUtil;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TradeProcessor implements Processor{
@@ -28,7 +30,7 @@ public class TradeProcessor implements Processor{
     public void process(Exchange exchange) throws Exception {
         LOGGER.info("Start Process The File");
         String in = (String) exchange.getIn().getBody();
-        if(VerificationService.verifyNotEmpty(in)){
+        if(VerificationUtil.verifyNotEmpty(in)){
             List<Trade> tradeList = extractTradeList(in);
             tradeList = remainHighestVersionTrade(tradeList);
             List<Report> reportList = transferToReportList(tradeList);
@@ -50,36 +52,39 @@ public class TradeProcessor implements Processor{
 
     private boolean verifyTrade(String[] trade){
         return trade!=null && trade.length==7 &&
-                VerificationService.verifyNumerical(trade[0]) &&
-                VerificationService.verifyNumerical(trade[1]) &&
-                VerificationService.verifyNotEmpty(trade[2]) &&
-                VerificationService.verifyNumerical(trade[3]) &&
-                VerificationService.verifyDirection(trade[4]) &&
-                VerificationService.verifyNotEmpty(trade[5]) &&
-                VerificationService.verifyOperation(trade[6]);
+                VerificationUtil.verifyNumerical(trade[0]) &&
+                VerificationUtil.verifyNumerical(trade[1]) &&
+                VerificationUtil.verifyNotEmpty(trade[2]) &&
+                VerificationUtil.verifyNumerical(trade[3]) &&
+                VerificationUtil.verifyDirection(trade[4]) &&
+                VerificationUtil.verifyNotEmpty(trade[5]) &&
+                VerificationUtil.verifyOperation(trade[6]);
     }
 
     private Trade convertToTrade(String[] tradeInfo){
         return new Trade(tradeInfo);
     }
 
-    private boolean meetTradeClearCondition(Trade clearTrade, Trade originalTrade){
-        return clearTrade.getTradeId()==originalTrade.getTradeId() &&
-                clearTrade.getTradeVersion() < originalTrade.getTradeVersion();
-    }
 
     public List<Trade> remainHighestVersionTrade(List<Trade> tradeList){
-        List<Trade> highestVersionTradeList = tradeList;
+        Map<Integer, Trade> currentHighest = new HashMap<>();
+        for(Trade trade: tradeList){
+            if(!currentHighest.containsKey(trade.getTradeId()) ||
+                    currentHighest.get(trade.getTradeId()).getTradeVersion()<trade.getTradeVersion()){
 
-        for(Trade expectTrade:highestVersionTradeList){
-            for(Trade originalTrade:tradeList){
-                if(meetTradeClearCondition(expectTrade,originalTrade)){
-                        expectTrade.setPositionQuantity(0);
-                        expectTrade.setQuantity(0);
+                Trade toBeReplaced = currentHighest.put(trade.getTradeId(),trade);
+                if (toBeReplaced != null) {
+                    LOGGER.info("replacing highest, clear the old one.");
+                    toBeReplaced.setQuantity(0);
+                    toBeReplaced.setPositionQuantity(0);
                 }
+            }else {//currentHighest trade version >= tradeList
+                trade.setQuantity(0);
+                trade.setPositionQuantity(0);
             }
         }
-        return highestVersionTradeList;
+
+        return tradeList;
     }
 
     private boolean meetAggregateCondition(Trade trade, Report report){
@@ -104,10 +109,10 @@ public class TradeProcessor implements Processor{
     public List<Report> transferToReportList(List<Trade> tradeList){
         List<Report> reportList = new ArrayList<>();
 
-        reportList.add(new Report(tradeList.get(0)));
+//        reportList.add(new Report(tradeList.get(0)));
 
-        if(tradeList.size()>1){
-            for(int i = 1;i<tradeList.size();i++){
+        if(tradeList.size()>0){
+            for(int i = 0;i<tradeList.size();i++){
                 boolean includeFlag = false;
                 for(Report report:reportList){
                     if(meetAggregateCondition(tradeList.get(i),report)){

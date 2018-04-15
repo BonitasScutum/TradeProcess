@@ -33,7 +33,7 @@ public class Trade {
 
     }
 
-    public Trade(String[] tradeInfo){
+    public Trade(String[] tradeInfo) {
         this.tradeId = Integer.parseInt(tradeInfo[0]);
         this.tradeVersion = Integer.parseInt(tradeInfo[1]);
         this.securityIdentifier = tradeInfo[2];
@@ -107,19 +107,20 @@ public class Trade {
     public void setPositionQuantity(int positionQuantity) {
         this.positionQuantity = positionQuantity;
     }
+
     public void setPositionQuantity() {
-        switch (direction){
+        switch (direction) {
             case DIRECTION_BUY:
-                if(StringUtils.equals(OPERATION_NEW,operation) || StringUtils.equals(OPERATION_AMEND,operation)){
-                    this.positionQuantity = this.quantity;
-                }else {
+                if (StringUtils.equals(OPERATION_CANCEL, operation)) {
                     this.positionQuantity = -this.quantity;
+                } else {
+                    this.positionQuantity = this.quantity;
                 }
                 break;
             case DIRECTION_SELL:
-                if(StringUtils.equals(OPERATION_CANCEL,operation)){
+                if (StringUtils.equals(OPERATION_CANCEL, operation)) {
                     this.positionQuantity = this.quantity;
-                }else{
+                } else {
                     this.positionQuantity = -this.quantity;
                 }
                 break;

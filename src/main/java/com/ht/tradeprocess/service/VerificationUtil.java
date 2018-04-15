@@ -2,7 +2,7 @@ package com.ht.tradeprocess.service;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class VerificationService {
+public class VerificationUtil {
     private static final String DIRECTION_BUY = "BUY";
     private static final String DIRECTION_SELL = "SELL";
     private static final String OPERATION_NEW = "NEW";
